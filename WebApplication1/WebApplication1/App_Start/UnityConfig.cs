@@ -1,5 +1,6 @@
+using Microsoft.Extensions.DependencyInjection;
 using System;
-
+using System.Net.Http;
 using Unity;
 
 namespace WebApplication1
@@ -42,6 +43,19 @@ namespace WebApplication1
 
             // TODO: Register your type's mappings here.
             // container.RegisterType<IProductRepository, ProductRepository>();
+
+            var svc = new ServiceCollection();
+
+            ConfigureServices(svc);
+
+            var provider = svc.BuildServiceProvider();
+
+            container.RegisterFactory<IHttpClientFactory>(c => provider.GetRequiredService<IHttpClientFactory>());
+        }
+
+        private static void ConfigureServices(IServiceCollection service)
+        {
+            service.AddHttpClient();
         }
     }
 }
